@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -5,18 +6,19 @@ using UnityEngine;
 /// <summary>
 /// SongSpec SO 에 대한 커스텀 에디터
 /// * 샘플링 기능
+/// * 블록 생성
 /// </summary>
 [CustomEditor(typeof(SongSpecSO))]
 public class SongSpecEditor : Editor
 {
     AudioClip _cachedAudioClip;
-    private const float THRESHOLD_GAIN = 1.2f; //임계값
+    private const float THRESHOLD_GAIN = 2.2f; //임계값
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        SongSpecSO songSpec = (SongSpecSO)target;
+        SongSpecSO songSpec = (SongSpecSO)target; //CustomEditor 자신
 
         using (new EditorGUILayout.VerticalScope())
         {
@@ -35,7 +37,22 @@ public class SongSpecEditor : Editor
             EditorGUILayout.Space();
             using (new EditorGUILayout.HorizontalScope())
             {
+                if(_cachedAudioClip != null)
+                {
+                    EditorGUI.BeginDisabledGroup(true);
+                }
+                if (GUILayout.Button("Bake peaks"))
+                {
+                    List<float> peaks = ExtractPeaks(_cachedAudioClip, songSpec.BPM);
+                    songSpec.BakePeaks(_cachedAudioClip, peaks);
 
+                    EditorUtility.SetDirty(songSpec);
+                    AssetDatabase.SaveAssets();
+                }
+                if (_cachedAudioClip != null)
+                {
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
         }
@@ -43,7 +60,7 @@ public class SongSpecEditor : Editor
 
     /// <summary>
     /// 오디오 파형 데이터 추출 작업
-    /// (음원 채널 별로 time 추출)
+    /// (음원 채널 별로 블록 추출)
     /// </summary>
     /// <param name="clip"></param>
     /// <returns></returns>
@@ -119,3 +136,4 @@ public class SongSpecEditor : Editor
         return peaks;
     }
 }
+#endif

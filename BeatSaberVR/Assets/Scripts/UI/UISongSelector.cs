@@ -3,13 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using BeatSaber.Runtime.Game;
 
 public class UISongSelector : MonoBehaviour
 {
     [Serializable]
     class SongInfo
     {
-        public string songTitle;
+        public SongSpecSO songSpec;
         public GameObject songCard;
     }
 
@@ -29,7 +30,7 @@ public class UISongSelector : MonoBehaviour
             _songInfos[_selectedIndex].songCard.SetActive(false);
             _selectedIndex = value;
             _songInfos[_selectedIndex].songCard.SetActive(true);
-            _songTitle.text = _songInfos[_selectedIndex].songTitle;
+            _songTitle.text = _songInfos[_selectedIndex].songSpec.Title;
         }
     }
 
@@ -40,7 +41,7 @@ public class UISongSelector : MonoBehaviour
             _songInfos[i].songCard.SetActive(i == _selectedIndex);
         }
 
-        _songTitle.text = _songInfos[_selectedIndex].songTitle;
+        _songTitle.text = _songInfos[_selectedIndex].songSpec.Title;
     }
 
     private void OnEnable()
@@ -67,6 +68,7 @@ public class UISongSelector : MonoBehaviour
     }
     public void OnClickPlayButton()
     {
+        GameManager.gameSession.SelectedSongSpec = _songInfos[_selectedIndex].songSpec;
         SceneManager.LoadScene("InGame");
     }
 }
