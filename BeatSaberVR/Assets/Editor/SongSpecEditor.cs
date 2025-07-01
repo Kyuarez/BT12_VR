@@ -39,19 +39,14 @@ public class SongSpecEditor : Editor
             {
                 if(_cachedAudioClip != null)
                 {
-                    EditorGUI.BeginDisabledGroup(true);
-                }
-                if (GUILayout.Button("Bake peaks"))
-                {
-                    List<float> peaks = ExtractPeaks(_cachedAudioClip, songSpec.BPM);
-                    songSpec.BakePeaks(_cachedAudioClip, peaks);
+                    if (GUILayout.Button("Bake peaks"))
+                    {
+                        List<float> peaks = ExtractPeaks(_cachedAudioClip, songSpec.BPM);
+                        songSpec.BakePeaks(_cachedAudioClip, peaks);
 
-                    EditorUtility.SetDirty(songSpec);
-                    AssetDatabase.SaveAssets();
-                }
-                if (_cachedAudioClip != null)
-                {
-                    EditorGUI.EndDisabledGroup();
+                        EditorUtility.SetDirty(songSpec);
+                        AssetDatabase.SaveAssets();
+                    }
                 }
             }
 
@@ -84,7 +79,7 @@ public class SongSpecEditor : Editor
         }
 
         //볼륨 값 확인용 RMS(Root Mean Square)
-        float windowSize = clip.frequency / bpm; //추가 보정값은 테스트하면서 찾기
+        float windowSize = 24 * clip.frequency / bpm; //추가 보정값은 테스트하면서 찾기
         int windowCount = sampleCount / Mathf.FloorToInt(windowSize);
         float[] rmsArr = new float[windowCount];
         float meanRms = 0f;

@@ -13,6 +13,11 @@ namespace BeatSaber.Runtime.Game
         Transform[] _mapUnits;
         int[] _unitIndices;
 
+        private void Awake()
+        {
+            GameManager.gameSession.playSpeed = _speed;
+        }
+
         private void Start()
         {
             _mapUnits = new Transform[_initSpawnCount];

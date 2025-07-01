@@ -48,6 +48,7 @@ public class GameSessionWindow : EditorWindow
 
             _cachedTargetSerialized.Update();
             EditorGUILayout.PropertyField(_cachedTargetSerialized.FindProperty("SelectedSongSpec"));
+            EditorGUILayout.PropertyField(_cachedTargetSerialized.FindProperty("playSpeed"));
             _cachedTargetSerialized.ApplyModifiedProperties();
         }
     }
