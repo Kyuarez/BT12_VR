@@ -39,6 +39,14 @@ namespace BeatSaber.Runtime.Game
             StartCoroutine(CoMoveNotes());
         }
 
+        /// <summary>
+        /// Sabor에서 호출 : Note 파괴
+        /// </summary>
+        public bool TryHit(Transform note)
+        {
+            return _noteDict.Remove(note);
+        }
+
         private IEnumerator CoPlayAudio()
         {
             yield return new WaitForSeconds(_preSpawnDelay);

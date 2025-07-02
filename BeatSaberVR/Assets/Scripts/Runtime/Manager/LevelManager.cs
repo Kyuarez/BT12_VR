@@ -12,9 +12,12 @@ namespace BeatSaber.Runtime.Game
 
         Transform[] _mapUnits;
         int[] _unitIndices;
+        AudioSource _audioSource;
 
         private void Awake()
         {
+            _audioSource = GetComponent<AudioSource>();
+            _audioSource.clip = GameManager.gameSession.SelectedSongSpec.AudioClip;
             GameManager.gameSession.playSpeed = _speed;
         }
 
